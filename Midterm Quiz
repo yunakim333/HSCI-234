@@ -44,8 +44,15 @@ def draw_random_square_at():
 
 def draw_inside_square():
     d = p5.dist(x, y, p5.mouseX, p5.mouseY)
-    if (d < w):
+    if(cursor_inside_circle() == True):
       p5.fill(200)
     else:
       p5.fill(255)
     p5.rect(x, y, w, h) 
+    
+def cursor_inside_square():
+   d = p5.dist(x, y, p5.mouseX, p5.mouseY)
+   if (d < radius):
+     return True
+   else:
+     return False
