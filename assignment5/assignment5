@@ -1,0 +1,126 @@
+import js
+p5 = js.window
+
+stage = 0
+
+pl_X= 200
+pl_Y= 170
+pl_width = 15
+pl_height= 35
+pl_Xspeed = p5.random(1,1.5)
+pl_Yspeed = p5.random(-1,1)
+
+bl_X = 100
+bl_Y= 150
+bl_width = 100
+bl_height= 20
+bl_Xspeed = p5.random(1,1.5)
+bl_Yspeed = p5.random(-1,1)
+
+program_state = 'START'
+program_timer = p5.millis()
+print("program_timer = " + str(program_timer))
+
+
+
+def setup():
+    p5.createCanvas(300, 300)
+    p5.rectMode(p5.CENTER)
+    p5.textAlign(p5.CENTER)
+    print('finished setup..')
+
+def draw():
+    p5.background(0) 
+    global program_timer, program_state, pl_Xspeed, pl_Yspeed, bl_Xspeed, bl_Yspeed
+    p5.ellipse(p5.mouseX, p5.mouseY, 20, 20)
+    p5.text('program_state = ' + program_state, 10, 20)
+
+    if(p5.millis() > program_timer + 3000):
+        print('3 seconds passed..')
+        program_state = 'PLAY'
+        program_timer = p5.millis()
+    if(pl_Xspeed == 0 and pl_Yspeed == 0):
+        if(p5.mouseIsPressed):
+            # set random ball speed:
+            pl_Xspeed = p5.random(1, 1.5)
+            pl_Yspeed = p5.random(-1, 1)
+    if(stage == 0):
+        game()
+
+    if(program_state == 'PLAY'):
+        update_pl()
+    draw_pl(pl_X, pl_Y)
+
+    if(program_state == 'PAUSE'):
+        update_bl()
+    draw_bl(bl_X, bl_Y)
+
+    if(program_state == 'START'):
+        p5.fill(255, 255, 0)  # yellow
+        p5.rect(150, 150, 90, 40)
+        p5.fill(0)
+        p5.text('3 sec pause..', 115, 155)
+
+def draw_pl(X, Y):
+    p5.stroke(0)
+    p5.strokeWeight(2)
+    p5.fill(150,0,170)
+    p5.rect(pl_X,pl_Y,pl_width, pl_height)
+
+def update_pl():
+    global pl_X, pl_Xspeed
+    global pl_Y, pl_Yspeed
+   
+    pl_X = pl_X + pl_Xspeed
+    pl_Y = pl_Y + pl_Yspeed
+
+def draw_bl(X, Y):
+    p5.stroke(0)
+    p5.strokeWeight(2)
+    p5.fill(255, 120, 0)
+    p5.rect(bl_X, bl_Y, bl_width, bl_height)
+
+
+def update_bl():
+    global bl_X, bl_Xspeed
+    global bl_Y, bl_Yspeed
+   
+    bl_X = bl_X + bl_Xspeed
+    bl_Y = bl_Y + bl_Yspeed
+   
+
+def game():
+    #ground
+    #p5.background(255, 204, 100)
+    p5.noStroke()
+    p5.fill(100,200,75)
+    p5.rect(p5.width/2, 200, p5.height, 10) 
+    #frame
+    p5.noFill()
+    p5.stroke(0)
+    p5.strokeWeight(7)
+    p5.rect(p5.width/2, p5.height/2, p5.width, p5.height)
+
+
+
+    
+def keyPressed(event):
+    print('keyPressed.. ' + str(p5.key))
+
+def keyReleased(event):
+    print('keyReleased.. ' + str(p5.key))
+
+def mousePressed(event):
+    global program_timer
+    print('mousePressed..')
+    global program_state
+    if(program_state == 'PAUSE'):
+        program_state = 'PLAY'
+    elif(program_state == 'PLAY'):
+        program_state = 'PAUSE'
+        program_timer = p5.millis()  # update program timer
+    print('change program_state to ' + program_state)
+
+def mouseReleased(event):
+    print('mouseReleased..')
+    
